@@ -51,7 +51,27 @@ export default function AppConfigured() {
 
             return;
           }
-        }
+        } 
+        
+        //Get user group and set to the
+          try {
+            const user = await Auth.currentAuthenticatedUser();
+            if (user) {
+              const usergroup = user.signInUserSession.accessToken.payload["cognito:groups"]
+              //check whether usergroup contains admin
+              if(currentConfig != null) {
+                currentConfig.config.enable_admin_menu = false;
+                
+                if((usergroup != null && usergroup.includes("admin"))){
+                  currentConfig.config.enable_admin_menu = true;
+                  
+                }
+              }
+            }
+          } catch (e) {
+            
+          }
+        
 
         setConfig(currentConfig);
       } catch (e) {

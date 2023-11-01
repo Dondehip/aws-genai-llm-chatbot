@@ -13,6 +13,7 @@ export interface AppConfig {
           name: CognitoHostedUIIdentityProvider;
         };
     rag_enabled: boolean;
+    enable_admin_menu:boolean;
     api_endpoint: string;
     websocket_endpoint: string;
     default_embeddings_model: string;

@@ -24,16 +24,11 @@ export default function NavigationPanel() {
         text: "Chatbot",
         items: [
           { type: "link", text: "Playground", href: "/chatbot/playground" },
-          {
-            type: "link",
-            text: "Large Language Models (LLMs)",
-            href: "/chatbot/models",
-          },
         ],
       },
     ];
 
-    if (appContext?.config.rag_enabled) {
+    if (appContext?.config.rag_enabled && appContext?.config.enable_admin_menu) {
       items.push({
         type: "section",
         text: "Retrieval-Augmented Generation (RAG)",
@@ -59,16 +54,6 @@ export default function NavigationPanel() {
         ],
       });
     }
-
-    items.push(
-      { type: "divider" },
-      {
-        type: "link",
-        text: "Documentation",
-        href: "https://github.com/aws-samples/aws-genai-llm-chatbot",
-        external: true,
-      }
-    );
 
     return items;
   });

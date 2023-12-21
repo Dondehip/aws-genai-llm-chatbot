@@ -124,13 +124,15 @@ export class LangChainInterface extends Construct {
     if (props.ragEngines) {
       props.ragEngines.workspacesTable.grantReadWriteData(requestHandler);
       props.ragEngines.documentsTable.grantReadWriteData(requestHandler);
-
-      requestHandler.addToRolePolicy(
-        new iam.PolicyStatement({
-          actions: ["sagemaker:InvokeEndpoint"],
-          resources: [props.ragEngines?.sageMakerRagModelsEndpoint.ref],
-        })
-      );
+      
+      if(props.ragEngines?.sageMakerRagModelsEndpoint) {
+        requestHandler.addToRolePolicy(
+          new iam.PolicyStatement({
+            actions: ["sagemaker:InvokeEndpoint"],
+            resources: [props.ragEngines?.sageMakerRagModelsEndpoint?.ref],
+          })
+        );
+      }
     }
 
     if (props.ragEngines?.kendraRetrieval) {

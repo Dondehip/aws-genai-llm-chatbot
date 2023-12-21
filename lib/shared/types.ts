@@ -81,6 +81,7 @@ export interface SystemConfig {
       default?: boolean;
     }[];
     crossEncoderModels: {
+      enabled: boolean;
       provider: ModelProvider;
       name: string;
       default?: boolean;

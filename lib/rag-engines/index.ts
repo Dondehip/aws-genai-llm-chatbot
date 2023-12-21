@@ -28,7 +28,7 @@ export class RagEngines extends Construct {
   public readonly workspacesTable: dynamodb.Table;
   public readonly workspacesByObjectTypeIndexName: string;
   public readonly documentsByCompountKeyIndexName: string;
-  public readonly sageMakerRagModelsEndpoint: sagemaker.CfnEndpoint;
+  public readonly sageMakerRagModelsEndpoint?: sagemaker.CfnEndpoint | null;
   public readonly fileImportWorkflow?: sfn.StateMachine;
   public readonly websiteCrawlingWorkflow?: sfn.StateMachine;
   public readonly deleteWorkspaceWorkflow?: sfn.StateMachine;
@@ -38,14 +38,16 @@ export class RagEngines extends Construct {
 
     const tables = new RagDynamoDBTables(this, "RagDynamoDBTables");
 
-    const sageMakerRagModels = new SageMakerRagModels(
-      this,
-      "SageMakerRagModels",
-      {
-        shared: props.shared,
-        config: props.config,
-      }
-    );
+    let sageMakerRagModels: SageMakerRagModels | null = null;
+    if (props.config.rag.engines.aurora.enabled) {
+      sageMakerRagModels = new SageMakerRagModels(
+        this,
+        "SageMakerRagModels",
+        {
+          shared: props.shared,
+          config: props.config,
+        });
+    } 
 
     let auroraPgVector: AuroraPgVector | null = null;
     if (props.config.rag.engines.aurora.enabled) {
@@ -78,7 +80,7 @@ export class RagEngines extends Construct {
       shared: props.shared,
       config: props.config,
       auroraDatabase: auroraPgVector?.database,
-      sageMakerRagModelsEndpoint: sageMakerRagModels.model.endpoint,
+      sageMakerRagModelsEndpoint: sageMakerRagModels?.model.endpoint,
       workspacesTable: tables.workspacesTable,
       documentsTable: tables.documentsTable,
       ragDynamoDBTables: tables,
@@ -101,7 +103,7 @@ export class RagEngines extends Construct {
     this.auroraPgVector = auroraPgVector;
     this.openSearchVector = openSearchVector;
     this.kendraRetrieval = kendraRetrieval;
-    this.sageMakerRagModelsEndpoint = sageMakerRagModels.model.endpoint;
+    this.sageMakerRagModelsEndpoint = sageMakerRagModels?.model.endpoint;
     this.uploadBucket = dataImport.uploadBucket;
     this.processingBucket = dataImport.processingBucket;
     this.workspacesTable = tables.workspacesTable;

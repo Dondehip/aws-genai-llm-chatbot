@@ -64,6 +64,7 @@ export function getConfig(): SystemConfig {
       ],
       crossEncoderModels: [
         {
+          enabled: false,
           provider: "sagemaker",
           name: "cross-encoder/ms-marco-MiniLM-L-12-v2",
           default: true,

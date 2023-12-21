@@ -329,6 +329,7 @@ async function processCreateOptions(options: any): Promise<void> {
   }
 
   config.rag.crossEncoderModels[0] = {
+    enabled: false,
     provider: "sagemaker",
     name: "cross-encoder/ms-marco-MiniLM-L-12-v2",
     default: true,
